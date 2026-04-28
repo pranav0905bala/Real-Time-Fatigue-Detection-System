@@ -3,35 +3,28 @@ clear;
 close all;
 warning off;
 
-% Initialize webcam
-camera = webcam;
+% Load pretrained AlexNet
+net = alexnet;
+layers = net.Layers;
 
-% Load trained model
-load('alexnet-trained-model.mat');
+% Modify final layers for binary classification
+layers(23) = fullyConnectedLayer(2);
+layers(25) = classificationLayer;
 
-% Initialize face detector
-faceDetector = vision.CascadeObjectDetector;
+% Load dataset
+allImages = imageDatastore( ...
+    'dataset', ...
+    'IncludeSubfolders', true, ...
+    'LabelSource', 'foldernames');
 
-while true
-    frame = camera.snapshot;
-    boundingBoxes = step(faceDetector, frame);
+% Training options
+options = trainingOptions('sgdm', ...
+    'InitialLearnRate', 0.001, ...
+    'MaxEpochs', 20, ...
+    'MiniBatchSize', 64);
 
-    if ~isempty(boundingBoxes)
+% Train network
+trainedNet = trainNetwork(allImages, layers, options);
 
-        % Crop detected face
-        faceImage = imcrop(frame, boundingBoxes(1,:));
-        faceImage = imresize(faceImage, [227 227]);
-
-        % Classify fatigue state
-        predictedLabel = classify(trainedNet, faceImage);
-
-        image(frame);
-        title(['Detection Result: ', char(predictedLabel)]);
-        drawnow;
-
-    else
-        image(frame);
-        title('No Face Detected');
-        drawnow;
-    end
-end
+% Save trained model
+save('alexnet-trained-model.mat', 'trainedNet');
