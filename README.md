@@ -2,34 +2,71 @@
 A real-time fatigue detection system using computer vision and machine learning to classify fatigue states with high accuracy and low latency. Achieved with the help of a feature extraction and inference pipeline capable of processing over 1000+ frames with ~85% accuracy.
 
 ## Overview
-This project focused on developing a real-time fatigue detection system using computer vision and machine learning to identify signs of fatigue with low latency and high accuracy.
 
-## Problem Statement
-Fatigue detection is critical in applications such as driver safety and operator monitoring. The challenge was to create an efficient system capable of detecting fatigue accurately in real time.
+This project focuses on developing a real-time drowsiness detection system using MATLAB, Computer Vision, and Deep Learning techniques. The goal is to improve safety in transportation and other high-risk environments by detecting signs of fatigue through facial analysis.
 
-## System Architecture
-- Video input processing
-- Feature extraction pipeline
-- Machine learning classification model
-- Real-time inference system
+The system uses live webcam input, detects human faces using MATLAB’s `vision.CascadeObjectDetector`, preprocesses facial images, and classifies them into **Tired** or **Not Tired** states using a modified AlexNet convolutional neural network.
 
-## Tech Stack
+This solution provides a non-intrusive, scalable approach for fatigue monitoring without requiring physiological sensors like EEG or ECG.
+
+---
+
+## Key Features
+
+- Real-time face detection using webcam feed
+- Face cropping and preprocessing for uniform input
+- Modified AlexNet model for binary classification
+- Detection of tired vs. non-tired facial states
+- MATLAB-based implementation using Computer Vision Toolbox and Deep Learning Toolbox
+- Optimized for near real-time performance
+
+---
+
+## Technologies Used
+
 - MATLAB
-- Computer Vision
-- Machine Learning
+- Computer Vision Toolbox
+- Deep Learning Toolbox
+- AlexNet (Modified)
+- Viola-Jones Face Detection Algorithm
+- CNN-based Binary Classification
 
-## Implementation
-- Developed image processing methods for fatigue-related feature extraction
-- Trained classification models using collected frame data
-- Optimized inference speed for real-time performance
-- Integrated the full detection pipeline with live input
+---
 
-## Results
-- Achieved approximately 85% classification accuracy
-- Maintained latency below 90 ms
-- Processed over 1000+ frames efficiently
+## System Workflow
 
-## Future Work
-- Deep learning-based classification
-- Embedded deployment for edge devices
-- Multi-modal fatigue detection system
+1. Capture live video from webcam
+2. Detect face using Viola-Jones algorithm
+3. Crop and resize face image to 227×227 pixels
+4. Preprocess image for consistency
+5. Feed image into modified AlexNet
+6. Classify subject as:
+   - Tired
+   - Not Tired
+
+---
+
+## Challenges Faced
+
+- Limited dataset diversity
+- Misclassification with glasses and lighting variations
+- Reduced accuracy with diverse real-world conditions
+- Computational delays during high-resolution processing
+
+---
+
+## Future Improvements
+
+- Expand dataset diversity across demographics and environments
+- Improve robustness under poor lighting conditions
+- Add multi-level tiredness detection instead of binary classification
+- Explore lightweight deep learning models for faster deployment
+- Improve handling of outliers such as glasses and occlusions
+
+---
+
+## Project Report
+
+Detailed methodology, experiments, and evaluation are included in the final project report inside the `/report` folder.
+
+---
