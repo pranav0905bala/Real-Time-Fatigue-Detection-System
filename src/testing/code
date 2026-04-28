@@ -1,0 +1,30 @@
+clc;
+clear;
+close all;
+warning off;
+
+% Load pretrained AlexNet
+net = alexnet;
+layers = net.Layers;
+
+% Modify final layers for binary classification
+layers(23) = fullyConnectedLayer(2);
+layers(25) = classificationLayer;
+
+% Load dataset
+allImages = imageDatastore( ...
+    'dataset', ...
+    'IncludeSubfolders', true, ...
+    'LabelSource', 'foldernames');
+
+% Training options
+options = trainingOptions('sgdm', ...
+    'InitialLearnRate', 0.001, ...
+    'MaxEpochs', 20, ...
+    'MiniBatchSize', 64);
+
+% Train network
+trainedNet = trainNetwork(allImages, layers, options);
+
+% Save trained model
+save('alexnet-trained-model.mat', 'trainedNet');
