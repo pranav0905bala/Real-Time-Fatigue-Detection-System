@@ -1,0 +1,42 @@
+clc;
+clear;
+close all;
+warning off;
+
+% Initialize webcam and face detector
+camera = webcam;
+faceDetector = vision.CascadeObjectDetector;
+
+numImages = 150;
+imageCount = 0;
+
+while true
+    frame = camera.snapshot;
+    boundingBoxes = step(faceDetector, frame);
+
+    if ~isempty(boundingBoxes)
+
+        if imageCount >= numImages
+            break;
+        end
+
+        % Crop first detected face
+        faceImage = imcrop(frame, boundingBoxes(1,:));
+        faceImage = imresize(faceImage, [227 227]);
+
+        % Save image
+        filename = strcat(num2str(imageCount), '.bmp');
+        imwrite(faceImage, filename);
+
+        imageCount = imageCount + 1;
+
+        imshow(faceImage);
+        title('Captured Face Image');
+        drawnow;
+
+    else
+        imshow(frame);
+        title('No Face Detected');
+        drawnow;
+    end
+end
