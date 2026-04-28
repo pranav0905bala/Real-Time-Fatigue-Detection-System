@@ -1,0 +1,37 @@
+clc;
+clear;
+close all;
+warning off;
+
+% Initialize webcam
+camera = webcam;
+
+% Load trained model
+load('alexnet-trained-model.mat');
+
+% Initialize face detector
+faceDetector = vision.CascadeObjectDetector;
+
+while true
+    frame = camera.snapshot;
+    boundingBoxes = step(faceDetector, frame);
+
+    if ~isempty(boundingBoxes)
+
+        % Crop detected face
+        faceImage = imcrop(frame, boundingBoxes(1,:));
+        faceImage = imresize(faceImage, [227 227]);
+
+        % Classify fatigue state
+        predictedLabel = classify(trainedNet, faceImage);
+
+        image(frame);
+        title(['Detection Result: ', char(predictedLabel)]);
+        drawnow;
+
+    else
+        image(frame);
+        title('No Face Detected');
+        drawnow;
+    end
+end
